@@ -1,14 +1,21 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-bubble-cream: #FFF9F9;
+  --color-bubble-blush: #FFE5E9;
+  --color-bubble-rose: #FFA3B1;
+  --color-bubble-magenta: #FF6B8B;
+  --color-bubble-dark: #4A3538;
+}
 
 body {
-  background-color: #FFF9F9;
-  color: #4A3538;
+  background-color: var(--color-bubble-cream);
+  color: var(--color-bubble-dark);
   font-family: system-ui, -apple-system, sans-serif;
   margin: 0;
 }
 
+/* Custom Vector Animation for Floating Bubbles */
 .bubble-animate {
   animation: floatUp 6s linear forwards;
 }
