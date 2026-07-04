@@ -12,9 +12,10 @@ export function useBubbleStore() {
     return saved ? JSON.parse(saved) : {};
   });
 
-  const [stats, setStats] = useState(() => {
-    const saved = localStorage.getItem('bubble_stats');
-    return saved ? JSON.parse(saved) : { completed: 0, popped: 0 };
+  // New History schema tracking tasks completed per explicit date string
+  const [historyLog, setHistoryLog] = useState(() => {
+    const saved = localStorage.getItem('bubble_history_log');
+    return saved ? JSON.parse(saved) : {};
   });
 
   const [selectedDate, setSelectedDate] = useState(getLocalDateString());
@@ -24,8 +25,8 @@ export function useBubbleStore() {
   }, [taskMap]);
 
   useEffect(() => {
-    localStorage.setItem('bubble_stats', JSON.stringify(stats));
-  }, [stats]);
+    localStorage.setItem('bubble_history_log', JSON.stringify(historyLog));
+  }, [historyLog]);
 
   const getTasksForDate = (dateStr) => taskMap[dateStr] || [];
 
@@ -33,7 +34,12 @@ export function useBubbleStore() {
     const currentTasks = taskMap[dateStr] || [];
     if (currentTasks.length > 0) {
       setTaskMap(prev => ({ ...prev, [dateStr]: prev[dateStr].slice(1) }));
-      setStats(prev => ({ ...prev, completed: prev.completed + 1 }));
+      
+      // Increment historical data for this specific calendar day
+      setHistoryLog(prev => {
+        const currentCount = prev[dateStr] || 0;
+        return { ...prev, [dateStr]: currentCount + 1 };
+      });
     }
   };
 
@@ -68,20 +74,14 @@ export function useBubbleStore() {
     }));
   };
 
-  // Reordering Logic
   const moveTask = (dateStr, index, direction) => {
     const currentTasks = [...(taskMap[dateStr] || [])];
     const targetIndex = direction === 'up' ? index - 1 : index + 1;
-    
     if (targetIndex >= 0 && targetIndex < currentTasks.length) {
       const [movedTask] = currentTasks.splice(index, 1);
       currentTasks.splice(targetIndex, 0, movedTask);
       setTaskMap(prev => ({ ...prev, [dateStr]: currentTasks }));
     }
-  };
-
-  const incrementPopped = () => {
-    setStats(prev => ({ ...prev, popped: prev.popped + 1 }));
   };
 
   return { 
@@ -94,7 +94,6 @@ export function useBubbleStore() {
     editTask,
     deleteTask, 
     moveTask,
-    incrementPopped,
-    stats
+    historyLog
   };
 }
