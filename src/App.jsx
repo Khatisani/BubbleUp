@@ -15,8 +15,9 @@ export default function App() {
     completeTask, 
     skipTask, 
     addTask, 
-    deleteTask,
-    incrementPopped 
+    editTask,
+    deleteTask, 
+    moveTask 
   } = useBubbleStore();
 
   // Always bind the main focus card specifically to today's local date queue
@@ -84,7 +85,7 @@ export default function App() {
                     onAddTask={addTask}
                     onEditTask={editTask}
                     onDeleteTask={deleteTask}
-                    onMoveTask={moveTask}
+                    onMoveTask={moveTask}        
                   />
                 </div>
               )}
