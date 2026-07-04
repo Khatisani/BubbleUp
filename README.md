@@ -1,1 +1,1 @@
-# BubbleUp
+# BubbleUp app
