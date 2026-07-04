@@ -15,9 +15,14 @@ export default function App() {
       
       {/* Top Margin Spacer matching layout structure */}
       <div className="w-full max-w-3xl flex flex-col items-center mt-4">
-        <p className="text-sm font-light text-[#4A3538]/50 tracking-wide mb-6">
-          Right now, just this.
-        </p>
+        <div className="text-center mb-6 space-y-1">
+          <h1 className="text-3xl font-bold text-[#FF6B8B] tracking-wide">
+            BubbleUp.
+          </h1>
+          <p className="text-sm font-light text-[#4A3538]/60 tracking-wide">
+            Hey, Khatisani
+          </p>
+        </div>
 
         {/* Core Main View Container */}
         <div className="w-full space-y-4">
