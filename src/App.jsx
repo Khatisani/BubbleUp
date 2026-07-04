@@ -82,7 +82,9 @@ export default function App() {
                     onDateChange={setSelectedDate}
                     getTasks={getTasksForDate}
                     onAddTask={addTask}
+                    onEditTask={editTask}
                     onDeleteTask={deleteTask}
+                    onMoveTask={moveTask}
                   />
                 </div>
               )}

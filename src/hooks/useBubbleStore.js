@@ -1,24 +1,15 @@
 import { useState, useEffect } from 'react';
 
-// Get a standard YYYY-MM-DD string for local mapping
 export const getLocalDateString = (date = new Date()) => {
   const offset = date.getTimezoneOffset();
   const adjustedDate = new Date(date.getTime() - (offset * 60 * 1000));
   return adjustedDate.toISOString().split('T')[0];
 };
 
-const INITIAL_TASKS = {
-  // Mock data mapping to the Friday view in the screenshot
-  "2026-07-03": [
-    { id: 1, text: "Take three slow breaths" },
-    { id: 2, text: "Open course files" }
-  ]
-};
-
 export function useBubbleStore() {
   const [taskMap, setTaskMap] = useState(() => {
     const saved = localStorage.getItem('bubble_tasks_map');
-    return saved ? JSON.parse(saved) : INITIAL_TASKS;
+    return saved ? JSON.parse(saved) : {};
   });
 
   const [stats, setStats] = useState(() => {
@@ -36,16 +27,12 @@ export function useBubbleStore() {
     localStorage.setItem('bubble_stats', JSON.stringify(stats));
   }, [stats]);
 
-  // Gets tasks specifically for the dashboard (Today's active queue)
   const getTasksForDate = (dateStr) => taskMap[dateStr] || [];
 
   const completeTask = (dateStr) => {
     const currentTasks = taskMap[dateStr] || [];
     if (currentTasks.length > 0) {
-      setTaskMap(prev => ({
-        ...prev,
-        [dateStr]: prev[dateStr].slice(1)
-      }));
+      setTaskMap(prev => ({ ...prev, [dateStr]: prev[dateStr].slice(1) }));
       setStats(prev => ({ ...prev, completed: prev.completed + 1 }));
     }
   };
@@ -55,18 +42,22 @@ export function useBubbleStore() {
     if (currentTasks.length > 1) {
       setTaskMap(prev => {
         const [current, ...rest] = prev[dateStr];
-        return {
-          ...prev,
-          [dateStr]: [...rest, current]
-        };
+        return { ...prev, [dateStr]: [...rest, current] };
       });
     }
   };
 
-  const addTask = (dateStr, text) => {
+  const addTask = (dateStr, title, description) => {
     setTaskMap(prev => ({
       ...prev,
-      [dateStr]: [...(prev[dateStr] || []), { id: Date.now(), text }]
+      [dateStr]: [...(prev[dateStr] || []), { id: Date.now().toString(), text: title, description: description || "" }]
+    }));
+  };
+
+  const editTask = (dateStr, id, updatedTitle, updatedDescription) => {
+    setTaskMap(prev => ({
+      ...prev,
+      [dateStr]: (prev[dateStr] || []).map(t => t.id === id ? { ...t, text: updatedTitle, description: updatedDescription } : t)
     }));
   };
 
@@ -75,6 +66,18 @@ export function useBubbleStore() {
       ...prev,
       [dateStr]: (prev[dateStr] || []).filter(t => t.id !== id)
     }));
+  };
+
+  // Reordering Logic
+  const moveTask = (dateStr, index, direction) => {
+    const currentTasks = [...(taskMap[dateStr] || [])];
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    
+    if (targetIndex >= 0 && targetIndex < currentTasks.length) {
+      const [movedTask] = currentTasks.splice(index, 1);
+      currentTasks.splice(targetIndex, 0, movedTask);
+      setTaskMap(prev => ({ ...prev, [dateStr]: currentTasks }));
+    }
   };
 
   const incrementPopped = () => {
@@ -88,7 +91,9 @@ export function useBubbleStore() {
     completeTask, 
     skipTask, 
     addTask, 
+    editTask,
     deleteTask, 
+    moveTask,
     incrementPopped,
     stats
   };
