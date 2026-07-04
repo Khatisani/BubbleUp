@@ -15,7 +15,6 @@ body {
   margin: 0;
 }
 
-/* Custom Vector Animation for Floating Bubbles */
 .bubble-animate {
   animation: floatUp 6s linear forwards;
 }
