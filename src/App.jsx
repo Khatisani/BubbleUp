@@ -136,12 +136,12 @@ export default function App() {
       </footer>
 
       {/* Floating Launcher Bubble */}
-      <button 
+      {/* <button 
         onClick={() => setIsBreakOpen(true)}
         className="fixed bottom-6 right-6 w-16 h-16 rounded-full shadow-lg border-2 border-white/60 bg-gradient-to-tr from-[#FFA3B1] via-[#FFD3DA] to-[#FFF0F2] flex items-center justify-center z-20"
       >
         <span className="text-xl">🫧</span>
-      </button>
+      </button> */}
 
       {/* Cleaned Intermission Overlay Integration */}
       <BubbleBreak 

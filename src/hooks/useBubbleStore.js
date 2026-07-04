@@ -12,7 +12,6 @@ export function useBubbleStore() {
     return saved ? JSON.parse(saved) : {};
   });
 
-  // New History schema tracking tasks completed per explicit date string
   const [historyLog, setHistoryLog] = useState(() => {
     const saved = localStorage.getItem('bubble_history_log');
     return saved ? JSON.parse(saved) : {};
@@ -30,12 +29,35 @@ export function useBubbleStore() {
 
   const getTasksForDate = (dateStr) => taskMap[dateStr] || [];
 
+  // Updated to include a custom duration property defaulting to 25 minutes if empty
+  const addTask = (dateStr, title, description, duration) => {
+    setTaskMap(prev => ({
+      ...prev,
+      [dateStr]: [...(prev[dateStr] || []), { 
+        id: Date.now().toString(), 
+        text: title, 
+        description: description || "",
+        duration: parseInt(duration, 10) || 25 
+      }]
+    }));
+  };
+
+  const editTask = (dateStr, id, updatedTitle, updatedDescription, updatedDuration) => {
+    setTaskMap(prev => ({
+      ...prev,
+      [dateStr]: (prev[dateStr] || []).map(t => t.id === id ? { 
+        ...t, 
+        text: updatedTitle, 
+        description: updatedDescription,
+        duration: parseInt(updatedDuration, 10) || 25
+      } : t)
+    }));
+  };
+
   const completeTask = (dateStr) => {
     const currentTasks = taskMap[dateStr] || [];
     if (currentTasks.length > 0) {
       setTaskMap(prev => ({ ...prev, [dateStr]: prev[dateStr].slice(1) }));
-      
-      // Increment historical data for this specific calendar day
       setHistoryLog(prev => {
         const currentCount = prev[dateStr] || 0;
         return { ...prev, [dateStr]: currentCount + 1 };
@@ -51,20 +73,6 @@ export function useBubbleStore() {
         return { ...prev, [dateStr]: [...rest, current] };
       });
     }
-  };
-
-  const addTask = (dateStr, title, description) => {
-    setTaskMap(prev => ({
-      ...prev,
-      [dateStr]: [...(prev[dateStr] || []), { id: Date.now().toString(), text: title, description: description || "" }]
-    }));
-  };
-
-  const editTask = (dateStr, id, updatedTitle, updatedDescription) => {
-    setTaskMap(prev => ({
-      ...prev,
-      [dateStr]: (prev[dateStr] || []).map(t => t.id === id ? { ...t, text: updatedTitle, description: updatedDescription } : t)
-    }));
   };
 
   const deleteTask = (dateStr, id) => {
