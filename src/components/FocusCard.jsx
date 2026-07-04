@@ -1,61 +1,49 @@
 import React from 'react';
-import { CheckCircle, SkipForward, Flame, Sparkles } from 'lucide-react';
+import { Play, Check } from 'lucide-react';
 
-export default function FocusCard({ tasks, stats, onComplete, onSkip, onSpawnBubble }) {
-  const currentTask = tasks[0];
-
-  const handleComplete = () => {
-    // Trigger the bubble floating animation particle effect before completing
-    if (currentTask) {
-      onSpawnBubble(currentTask.text);
-      onComplete();
-    }
-  };
+export default function FocusCard({ currentTask, onDone, onSkip }) {
+  // Gracefully handles standard raw objects or strings falling back
+  const displayTitle = typeof currentTask === 'string' ? currentTask : currentTask?.text;
 
   return (
-    <div className="bg-white rounded-3xl p-8 shadow-sm border border-bubble-blush/60 text-center max-w-md w-full relative overflow-hidden">
-      {/* Top Stats Banner */}
-      <div className="flex justify-between items-center mb-8 border-b border-bubble-blush/30 pb-4">
-        <div className="flex items-center space-x-2 text-bubble-dark/80">
-          <Flame className="w-5 h-5 text-bubble-magenta animate-pulse" />
-          <span className="text-sm font-medium">Done: {stats.completed}</span>
-        </div>
-        <div className="flex items-center space-x-2 text-bubble-dark/80">
-          <Sparkles className="w-4 h-4 text-bubble-rose" />
-          <span className="text-sm font-medium">Popped: {stats.popped}</span>
-        </div>
-      </div>
-
-      {/* Main Focus Target */}
-      <div className="my-10 space-y-4">
-        <span className="text-xs font-bold tracking-widest text-bubble-magenta/70 uppercase bg-bubble-blush/40 px-3 py-1 rounded-full">
-          Current Focus
-        </span>
-        <h2 className="text-2xl font-semibold text-bubble-dark min-h-[80px] flex items-center justify-center px-4 leading-relaxed">
-          {currentTask ? currentTask.text : "All clear! Time to recharge. ✨"}
-        </h2>
-      </div>
-
-      {/* Primary Control Group */}
-      <div className="flex flex-col space-y-3 mt-6">
-        <button
-          onClick={handleComplete}
-          disabled={!currentTask}
-          className="w-full py-4 bg-bubble-magenta hover:bg-bubble-magenta/90 disabled:opacity-50 text-white font-semibold rounded-2xl flex items-center justify-center space-x-2 shadow-sm shadow-bubble-magenta/20 active:scale-[0.98] transition-all cursor-pointer"
-        >
-          <CheckCircle className="w-5 h-5" />
-          <span>Mark as Done</span>
-        </button>
-
-        <button
+    <div className="w-full max-w-3xl bg-[#FFFBFB] rounded-[40px] px-8 py-12 border border-white/80 shadow-[0_30px_70px_rgba(255,163,177,0.12)] text-center space-y-6 relative overflow-hidden transition-all duration-500 hover:shadow-[0_40px_80px_rgba(255,163,177,0.18)]">
+      
+      {/* Tiny soft sub-header */}
+      <span className="text-[11px] font-bold tracking-[0.2em] text-[#FF94A5] uppercase block mb-2">
+        Next Tiny Step
+      </span>
+      
+      {/* Main Big Focus Text matching typography styling */}
+      <h2 className="text-3xl md:text-4xl font-serif font-medium px-4 text-[#3D282B] tracking-tight leading-normal min-h-[4.5rem] flex items-center justify-center">
+        {displayTitle}
+      </h2>
+      
+      {/* Explanatory supportive tagline snippet */}
+      <p className="text-xs md:text-sm font-light text-[#4A3538]/50 tracking-wide max-w-md mx-auto">
+        One thing. That's all. You can do this — or skip. Both are okay.
+      </p>
+      
+      {/* Perfect matched actions alignment layout */}
+      <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-xl mx-auto">
+        
+        <button 
           onClick={onSkip}
-          disabled={tasks.length <= 1}
-          className="w-full py-3 bg-bubble-blush/40 hover:bg-bubble-blush/60 disabled:opacity-40 text-bubble-dark font-medium rounded-2xl flex items-center justify-center space-x-2 active:scale-[0.98] transition-all cursor-pointer text-sm"
+          className="w-full sm:w-auto px-6 py-3.5 bg-white border border-[#FFE0E4] hover:bg-[#FFF4F5] text-[#4A3538]/70 font-medium rounded-full transition-all active:scale-98 text-xs tracking-wider flex items-center justify-center space-x-2 shadow-sm"
         >
-          <SkipForward className="w-4 h-4" />
-          <span>Skip for Now</span>
+          <Play size={12} className="opacity-60 rotate-180 transform" />
+          <span>Skip for now</span>
         </button>
+
+        <button 
+          onClick={onDone}
+          className="w-full sm:flex-1 py-4 bg-gradient-to-r from-[#FF6B8B] to-[#FF5276] hover:brightness-105 text-white font-medium rounded-full shadow-[0_8px_25px_rgba(255,107,139,0.35)] transition-all active:scale-98 text-sm tracking-wide flex items-center justify-center space-x-2"
+        >
+          <Check size={16} strokeWidth={2.5} />
+          <span>Done — I did it</span>
+        </button>
+
       </div>
+
     </div>
   );
 }
