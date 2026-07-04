@@ -1,15 +1,23 @@
 import { useState, useEffect } from 'react';
 
-const INITIAL_TASKS = [
-  { id: 1, text: "Drink a glass of water 💧" },
-  { id: 2, text: "Stand up and do a 30-second stretch 🌸" },
-  { id: 3, text: "Open course file folder on laptop 💻" },
-  { id: 4, text: "Put phone face down across the room 🔇" }
-];
+// Get a standard YYYY-MM-DD string for local mapping
+export const getLocalDateString = (date = new Date()) => {
+  const offset = date.getTimezoneOffset();
+  const adjustedDate = new Date(date.getTime() - (offset * 60 * 1000));
+  return adjustedDate.toISOString().split('T')[0];
+};
+
+const INITIAL_TASKS = {
+  // Mock data mapping to the Friday view in the screenshot
+  "2026-07-03": [
+    { id: 1, text: "Take three slow breaths" },
+    { id: 2, text: "Open course files" }
+  ]
+};
 
 export function useBubbleStore() {
-  const [tasks, setTasks] = useState(() => {
-    const saved = localStorage.getItem('bubble_tasks');
+  const [taskMap, setTaskMap] = useState(() => {
+    const saved = localStorage.getItem('bubble_tasks_map');
     return saved ? JSON.parse(saved) : INITIAL_TASKS;
   });
 
@@ -18,41 +26,70 @@ export function useBubbleStore() {
     return saved ? JSON.parse(saved) : { completed: 0, popped: 0 };
   });
 
+  const [selectedDate, setSelectedDate] = useState(getLocalDateString());
+
   useEffect(() => {
-    localStorage.setItem('bubble_tasks', JSON.stringify(tasks));
-  }, [tasks]);
+    localStorage.setItem('bubble_tasks_map', JSON.stringify(taskMap));
+  }, [taskMap]);
 
   useEffect(() => {
     localStorage.setItem('bubble_stats', JSON.stringify(stats));
   }, [stats]);
 
-  const completeTask = () => {
-    if (tasks.length > 0) {
-      setTasks(prev => prev.slice(1));
+  // Gets tasks specifically for the dashboard (Today's active queue)
+  const getTasksForDate = (dateStr) => taskMap[dateStr] || [];
+
+  const completeTask = (dateStr) => {
+    const currentTasks = taskMap[dateStr] || [];
+    if (currentTasks.length > 0) {
+      setTaskMap(prev => ({
+        ...prev,
+        [dateStr]: prev[dateStr].slice(1)
+      }));
       setStats(prev => ({ ...prev, completed: prev.completed + 1 }));
     }
   };
 
-  const skipTask = () => {
-    if (tasks.length > 1) {
-      setTasks(prev => {
-        const [current, ...rest] = prev;
-        return [...rest, current];
+  const skipTask = (dateStr) => {
+    const currentTasks = taskMap[dateStr] || [];
+    if (currentTasks.length > 1) {
+      setTaskMap(prev => {
+        const [current, ...rest] = prev[dateStr];
+        return {
+          ...prev,
+          [dateStr]: [...rest, current]
+        };
       });
     }
   };
 
-  const addTask = (text) => {
-    setTasks(prev => [...prev, { id: Date.now(), text }]);
+  const addTask = (dateStr, text) => {
+    setTaskMap(prev => ({
+      ...prev,
+      [dateStr]: [...(prev[dateStr] || []), { id: Date.now(), text }]
+    }));
   };
 
-  const deleteTask = (id) => {
-    setTasks(prev => prev.filter(t => t.id !== id));
+  const deleteTask = (dateStr, id) => {
+    setTaskMap(prev => ({
+      ...prev,
+      [dateStr]: (prev[dateStr] || []).filter(t => t.id !== id)
+    }));
   };
 
   const incrementPopped = () => {
     setStats(prev => ({ ...prev, popped: prev.popped + 1 }));
   };
 
-  return { tasks, stats, completeTask, skipTask, addTask, deleteTask, incrementPopped };
+  return { 
+    selectedDate, 
+    setSelectedDate, 
+    getTasksForDate, 
+    completeTask, 
+    skipTask, 
+    addTask, 
+    deleteTask, 
+    incrementPopped,
+    stats
+  };
 }
