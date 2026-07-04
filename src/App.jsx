@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useBubbleStore, getLocalDateString } from './hooks/useBubbleStore';
 import FocusCard from './components/FocusCard';
 import TaskManager from './components/TaskManager';
-import ProgressHistory from './components/ProgressHistory'; // Imported your new progress component
+import ProgressHistory from './components/ProgressHistory';
+import BubbleBreak from './components/BubbleBreak';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('today');
@@ -19,12 +20,13 @@ export default function App() {
     editTask,
     deleteTask, 
     moveTask,
-    historyLog // Destructured cleanly from your store
+    historyLog,
+    incrementPopped // Verified: Destructured cleanly to prevent runtime error
   } = useBubbleStore();
 
   const todaysTasks = getTasksForDate(getLocalDateString());
 
-  // CLEAN VIEW SWITCHER: No more messy ternary operators in the return layout!
+  // Clean layout controller block
   let mainContent;
   if (activeTab === 'today') {
     mainContent = (
@@ -35,7 +37,7 @@ export default function App() {
           onSkip={() => skipTask(getLocalDateString())} 
         />
 
-        {/* Sub collapsible panel mapping layout changes */}
+        {/* Collapsible Sub-card wrapper */}
         <div className="w-full bg-white/40 border border-white/60 rounded-2xl px-6 py-4 flex flex-col shadow-sm transition-all duration-300">
           <div className="flex justify-between items-center w-full">
             <div className="flex items-center space-x-2 text-sm text-[#4A3538]/70">
@@ -78,7 +80,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#FFF4F5] text-[#4A3538] flex flex-col items-center justify-start pt-6 pb-28 px-4 md:px-8 font-sans antialiased space-y-8">
       
-      {/* Top Header Row Panel Layout */}
+      {/* Top Header Layout */}
       <header className="w-full max-w-3xl flex justify-between items-start px-2">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 rounded-2xl bg-[#FFE5E9] border border-[#FFA3B1]/30 flex items-center justify-center shadow-sm">
@@ -100,7 +102,7 @@ export default function App() {
         </div>
       </header>
 
-      {/* Main Container rendering your variable content blocks cleanly */}
+      {/* Main Container Workspace */}
       <div className="w-full max-w-3xl flex flex-col items-center space-y-4">
         <p className="text-xs font-light text-[#4A3538]/40 tracking-wide mb-2">
           Right now, just this.
@@ -109,7 +111,7 @@ export default function App() {
         {mainContent}
       </div>
 
-      {/* Nav Capsule layout positioned relative at the viewport base */}
+      {/* Nav Capsule component */}
       <footer className="fixed bottom-6 inset-x-0 mx-auto w-full max-w-md flex justify-center z-10 px-4">
         <div className="bg-white/70 backdrop-blur-lg border border-white/80 rounded-full px-2 py-1.5 flex space-x-1 shadow-[0_10px_30px_rgba(255,163,177,0.1)]">
           <button 
@@ -141,12 +143,12 @@ export default function App() {
         <span className="text-xl">🫧</span>
       </button>
 
-      {/* Pop Overlays */}
-      {isBreakOpen && (
-        <div onClick={() => setIsBreakOpen(false)} className="fixed inset-0 bg-[#FFF4F5]/95 z-50 flex items-center justify-center cursor-pointer">
-          <p className="text-xl font-light text-[#FF6B8B] animate-pulse">Pop Engine Active — Click to return</p>
-        </div>
-      )}
+      {/* Cleaned Intermission Overlay Integration */}
+      <BubbleBreak 
+        isOpen={isBreakOpen} 
+        onClose={() => setIsBreakOpen(false)} 
+        onPop={incrementPopped} 
+      />
 
     </div>
   );
