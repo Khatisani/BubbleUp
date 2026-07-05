@@ -10,7 +10,7 @@ Was there a massive amount of AI assistance involved? Absolutely. Lol. We fought
 ### Live Demo
 This application was built purely for my own personal use and is heavily personalized for me, my exact routine, and my specific cognitive pacing needs. While anyone is welcome to clone it, tweak it, or draw inspiration from it, its design choices, affirmations, and workflows are completely tailored to safeguard my own space.
 
-Experience the app live in production here: **[Live App on Vercel](here)
+Experience the app live in production here: [Live App on Vercel]([here](https://bubble-up.vercel.app/))
 
 ---
 
