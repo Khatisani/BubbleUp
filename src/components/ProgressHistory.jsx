@@ -23,7 +23,7 @@ export default function ProgressHistory({ historyLog, getTasksForDate }) {
   };
   const weeklyData = getWeeklyData();
 
-  // 3. Monthly Calculation parameters (Generates a clean grid of the last 28 days)
+  // 3. Monthly Calculation parameters
   const getMonthlyGrid = () => {
     return Array.from({ length: 28 }).map((_, i) => {
       const d = new Date();
@@ -32,7 +32,7 @@ export default function ProgressHistory({ historyLog, getTasksForDate }) {
       const count = historyLog[dateStr] || 0;
       
       // Categorize days gently by energy states rather than cold scores
-      let stateColor = 'bg-white/40 border-white/60'; // Rest / Uncharted days
+      let stateColor = 'bg-white/40 border-white/60'; 
       if (count > 0 && count <= 2) stateColor = 'bg-[#FFE5E9] border-[#FFA3B1]/30 text-[#FF6B8B]'; // Soft pacing day
       if (count > 2) stateColor = 'bg-gradient-to-tr from-[#FF6B8B] to-[#FF94A5] text-white shadow-sm'; // Flow state day
 

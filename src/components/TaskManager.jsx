@@ -7,7 +7,7 @@ const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 export default function TaskManager({ selectedDate, onDateChange, getTasks, onAddTask, onEditTask, onDeleteTask, onMoveTask }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [duration, setDuration] = useState("25"); // Defaulting target countdown limit
+  const [duration, setDuration] = useState("25");
   const [editingTask, setEditingTask] = useState(null);
   
   const currentTasks = getTasks(selectedDate);

@@ -29,7 +29,6 @@ export function useBubbleStore() {
 
   const getTasksForDate = (dateStr) => taskMap[dateStr] || [];
 
-  // Updated to include a custom duration property defaulting to 25 minutes if empty
   const addTask = (dateStr, title, description, duration) => {
     setTaskMap(prev => ({
       ...prev,

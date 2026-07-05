@@ -159,7 +159,7 @@ export default function BubbleBreak({ isOpen, onClose, onPop }) {
   return (
     <div className="fixed inset-0 bg-[#FFF4F5]/98 z-50 overflow-hidden flex flex-col justify-between p-6 select-none animate-fadeIn">
       
-      {/* Top HUD Controls - z-40 so items stay accessible but behind bubble fields */}
+      {/* Top Controls*/}
       <div className="w-full flex justify-between items-center z-40 relative">
         <div>
           <h2 className="text-xl font-serif font-semibold text-[#3D282B]">Bubble Break</h2>
@@ -190,14 +190,14 @@ export default function BubbleBreak({ isOpen, onClose, onPop }) {
         </button>
       </div>
 
-      {/* Center Affirmations Board - Lowered to z-30 with full mouse-passthrough */}
+      {/* Center Affirmations Board */}
       <div className="absolute inset-x-6 top-1/3 text-center pointer-events-none z-30 px-4 max-w-xl mx-auto">
         <p className="text-xl md:text-2xl font-serif font-medium text-[#3D282B] leading-relaxed drop-shadow-sm">
           {quote}
         </p>
       </div>
 
-      {/* CRITICAL FIXED LAYOUT CANVAS: Moved to z-50 to ensure bubbles sit on top of everything and click instantly */}
+      {/* Bubble Container */}
       <div ref={containerRef} className="absolute inset-0 z-50 overflow-hidden pointer-events-none">
         {bubbles.map(b => (
           <button

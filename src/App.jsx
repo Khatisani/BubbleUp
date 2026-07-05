@@ -21,12 +21,11 @@ export default function App() {
     deleteTask, 
     moveTask,
     historyLog,
-    incrementPopped // Verified: Destructured cleanly to prevent runtime error
+    incrementPopped
   } = useBubbleStore();
 
   const todaysTasks = getTasksForDate(getLocalDateString());
 
-  // Clean layout controller block
   let mainContent;
   if (activeTab === 'today') {
     mainContent = (
@@ -41,7 +40,6 @@ export default function App() {
         <div className="w-full bg-white/40 border border-white/60 rounded-2xl px-6 py-4 flex flex-col shadow-sm transition-all duration-300">
           <div className="flex justify-between items-center w-full">
             <div className="flex items-center space-x-2 text-sm text-[#4A3538]/70">
-              <span className="text-base">📋</span>
               <span className="font-light">My Tasks</span>
             </div>
             <button 
@@ -98,7 +96,7 @@ export default function App() {
 
         <div className="px-3 py-1.5 rounded-full bg-white/50 border border-[#FFE0E4] text-[10px] font-light text-[#FF94A5] tracking-wider flex items-center space-x-1 shadow-sm">
           <span>☀️</span>
-          <span>A soft day</span>
+          <span>Remember who you are</span>
         </div>
       </header>
 
@@ -130,7 +128,7 @@ export default function App() {
             onClick={() => setActiveTab('progress')}
             className={`px-6 py-2 rounded-full font-medium text-xs tracking-wide transition-all ${activeTab === 'progress' ? 'bg-[#FF6B8B] text-white shadow-sm' : 'text-[#4A3538]/60'}`}
           >
-            📊 Progress
+            Progress
           </button>
         </div>
       </footer>
