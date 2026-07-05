@@ -1,11 +1,11 @@
 # 🫧 BubbleUp (aka The 23:50 Epiphany)
 
-## 📌 How Dopamine Wrote an App
+## How Dopamine Wrote an App
 It was exactly 23:50 on a Saturday night. I was sitting there, completely paralyzed and deeply overwhelmed by a mountain of tasks. Standard calendars? Utter failures. Traditional corporate task-tracking apps? Monolithic guilt engines that exist solely to make neurodivergent brains feel terrible about themselves.
 
 So, naturally, being fundamentally addicted to dopamine and lacking any sense of self-preservation at midnight, I got up and decided this MVP had to be shipped immediately. I needed to see if a soft, safe, and protective task ecosystem could even exist.
 
-Was there a massive amount of AI assistance involved? Absolutely. Lol. We fought layout layer wars, survived white-screen-of-death rendering crashes, and argued about button micro-copy until 2:00 AM. But we shipped it. Welcome to BubbleUp—productivity software for people who just want a soft day.
+Was there a massive amount of AI assistance involved? Absolutely. Lol. We fought layout layer wars, survived white-screen-of-death rendering crashes, and argued until 2:00 AM. But we shipped it. Welcome to BubbleUp—productivity software for people who just want a soft day.
 
 ### Live Demo
 This application was built purely for my own personal use and is heavily personalized for me, my exact routine, and my specific cognitive pacing needs. While anyone is welcome to clone it, tweak it, or draw inspiration from it, its design choices, affirmations, and workflows are completely tailored to safeguard my own space.
@@ -14,7 +14,7 @@ Experience the app live in production here: **[Live App on Vercel](here)
 
 ---
 
-## 🌸 Key Core Frameworks
+## Key Core Frameworks
 BubbleUp rejects the cold, industrial anxiety of traditional task trackers in favor of dopamine-balanced, protective features:
 
 *   **Next Tiny Step Focus Card:** No terrifying laundry lists. The app locks onto one single item at a time. You don't have to look at the rest of your day until you choose to.
@@ -44,7 +44,7 @@ To launch the development server locally on your machine, drop these commands in
 
 ```bash
 # 1. Clone the repository to your workspace
-git clone [https://github.com/khatisani/bubbleup.git](https://github.com/khatisani/bubbleup.git)
+git clone https://github.com/khatisani/bubbleup.git
 
 # 2. Step into the project folder root
 cd bubbleup
